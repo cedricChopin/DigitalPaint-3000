@@ -22,15 +22,16 @@ public List<Vector3> ListeSommetsCurve;
         ListeSommets = new List<Transform>();
         canvas = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<CanvasManagement>();
         step = 100;
-        curve = canvas.DrawALine(Vector3.zero,Vector3.zero,Color.black);
-        Points = new GameObject();
-        Points.name = "Points";
+        
+        
     }
     public void Pressed(Vector3 pos, Transform point)  
     {
         if (firstPick)
         {
-            
+            Points = new GameObject();
+            curve = canvas.DrawALine(Vector3.zero, Vector3.zero, Color.black);
+            Points.name = "Points";
             actualPolygon = new GameObject();
             actualPolygon.name = "Bezier";
             Points.transform.parent = actualPolygon.transform;
