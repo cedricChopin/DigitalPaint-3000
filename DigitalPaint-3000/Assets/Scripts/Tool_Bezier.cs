@@ -15,6 +15,7 @@ public List<Vector3> ListeSommetsCurve;
     public GameObject actualPolygon;
     public LineRenderer curve;
     public GameObject Points;
+    public BezierCurvePath path;
 
     private void Awake()
     {
@@ -22,8 +23,9 @@ public List<Vector3> ListeSommetsCurve;
         ListeSommets = new List<Transform>();
         canvas = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<CanvasManagement>();
         step = 100;
-        
-        
+        path = GameObject.Find("Mesh").GetComponent<BezierCurvePath>();
+
+
     }
     public void Pressed(Vector3 pos, Transform point)  
     {
@@ -46,15 +48,16 @@ public List<Vector3> ListeSommetsCurve;
             Transform pt = Instantiate(point, pos, Quaternion.identity);
             pt.parent = Points.transform;
             ListeSommets.Add(pt);
-            if(ListeSommets.Count == 3)
+            if (ListeSommets.Count == 3)
             {
-                Bezier();
                 firstBezier = false;
             }
             if (!firstBezier)
             {
-                Bezier(); 
+                Bezier();
+                path.PointMesh();
             }
+
         }
         
     }
@@ -82,7 +85,6 @@ public List<Vector3> ListeSommetsCurve;
         }
 
         Vector3 temp;
-
         ListeSommetsCurve.Add(SommetsBezier[0]);
         for(int i = 1; i < step; i++)
         {
@@ -110,7 +112,14 @@ public List<Vector3> ListeSommetsCurve;
     }
 
 
-
+    /// <summary>
+    /// Calcule le barycentre
+    /// </summary>
+    /// <param name="iStep">Step int</param>
+    /// <param name="step">Step float</param>
+    /// <param name="a">Vec a</param>
+    /// <param name="b">Vec b</param>
+    /// <returns>retourne le barycentre</returns>
     Vector3 Bary(int iStep, int step, Vector3 a, Vector3 b)
     {
 
@@ -119,8 +128,10 @@ public List<Vector3> ListeSommetsCurve;
 
         return new Vector3(a.x + (iStepf / stepf) * (b.x - a.x), a.y + (iStepf / stepf) * (b.y - a.y), a.z + (iStepf / stepf) * (b.z - a.z));
     }
-
-
+    
+    /// <summary>
+    /// Dessine la courbe de bézier
+    /// </summary>
     public void drawCurve()
     {
         int count = ListeSommetsCurve.Count;

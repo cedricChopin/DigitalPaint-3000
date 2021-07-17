@@ -169,12 +169,23 @@ namespace SplineMesh {
             var triangleIndices = new List<int>(vertsInShape * 2 * segmentCount * 3);
             var bentVertices = new List<MeshVertex>(vertsInShape * 2 * segmentCount * 3);
 
-            foreach (var sample in path) {
+            /*foreach (var sample in path) {
                 foreach (Vertex v in shapeVertices) {
                     bentVertices.Add(sample.GetBent(new MeshVertex(
                         new Vector3(0, v.point.y, -v.point.x),
                         new Vector3(0, v.normal.y, -v.normal.x),
                         new Vector2(v.uCoord, textureScale * (sample.distanceInCurve + textureOffset)))));
+                }
+            }*/
+
+            foreach (var Point in Tool_Bezier.getInstance().ListeSommetsCurve)
+            {
+                foreach (Vertex v in shapeVertices)
+                {
+                    bentVertices.Add(path[0].GetBent(new MeshVertex(
+                        new Vector3(0, v.point.y, -v.point.x),
+                        new Vector3(0, v.normal.y, -v.normal.x),
+                        new Vector2(v.uCoord,-v.uCoord))));
                 }
             }
             var index = 0;
