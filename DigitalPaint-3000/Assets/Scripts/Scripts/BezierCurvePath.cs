@@ -161,6 +161,10 @@ public class BezierCurvePath : MonoBehaviour
                 curveDatas[i].points[1] = Tool_Bezier.getInstance().ListeSommetsCurve[j + 1];
                 curveDatas[i].points[2] = Tool_Bezier.getInstance().ListeSommetsCurve[j + 2];
                 curveDatas[i].points[3] = Tool_Bezier.getInstance().ListeSommetsCurve[j + 3];
+                curveDatas[i].points[0].z += 0.35f;
+                curveDatas[i].points[1].z += 0.35f;
+                curveDatas[i].points[2].z += 0.35f;
+                curveDatas[i].points[3].z += 0.35f;
                 j += 4;
             }
         }

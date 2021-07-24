@@ -73,6 +73,10 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
                 {
                     Tool_Polygone.getInstance().End_Polygon();
                 }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Tool_Bezier.getInstance().path.PointMesh();
+            }
             }
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
