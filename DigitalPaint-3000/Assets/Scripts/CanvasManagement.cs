@@ -20,6 +20,11 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
     [SerializeField]
     private int step;
     public LineRenderer ControlPolygon;
+    public List<GameObject> objDuplicated;
+    public GameObject revolution;
+    public GameObject mesh;
+    public Transform rotate;
+    private Vector3 milieu;
     enum Mode
     {
         Bezier,
@@ -34,10 +39,14 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
         ControlPolygon.name = "ControlPolygon";
         
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        revolution = new GameObject();
         MultiSommets = new List<List<Transform>>();
         boutons = canvas.Find("Boutons");
         actualColor = Color.red;
+        objDuplicated = new List<GameObject>();
+        mesh = GameObject.Find("Mesh");
         StartCoroutine(UpdateLinesAndBezier());
+        
     }
 
     private void LateUpdate()
@@ -56,7 +65,8 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
                             if (Physics.Raycast(ray, out hit))
                             {
                                 Tool_Bezier.getInstance().Pressed(hit.point, point);
-                            }
+                            
+                        }
                             break;
                         case Mode.Polygone:
                             if (Physics.Raycast(ray, out hit))
@@ -76,8 +86,55 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Tool_Bezier.getInstance().path.PointMesh();
+                for (int i = 0; i < objDuplicated.Count; i++)
+                {
+                    Destroy(objDuplicated[i]);
+                }
+                for (int i = 0; i < 45; i++)
+                {
+                    if (mesh != null)
+                    {
+                        GameObject tmp = Instantiate(mesh);
+                        Destroy(tmp.GetComponent<BezierCurvePath>());
+                        for (int j = 0; j < tmp.transform.childCount; j++)
+                        {
+                            Destroy(tmp.transform.GetChild(j).GetComponent<BezierCurveMesh>());
+                        }
+                        tmp.transform.RotateAround(rotate.position, Vector3.up, i * 8);
+                        tmp.transform.parent = revolution.transform;
+                        objDuplicated.Add(tmp);
+                    }
+
+                }
             }
             }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            int size = Tool_Bezier.getInstance().ListeSommets.Count;
+            milieu = (Tool_Bezier.getInstance().ListeSommets[size - 1].position + Tool_Bezier.getInstance().ListeSommets[0].position) / 2;
+            Vector3 direction = (Tool_Bezier.getInstance().ListeSommets[0].position - Tool_Bezier.getInstance().ListeSommets[size - 1].position).normalized;
+
+            for (int i = 0; i < objDuplicated.Count; i++)
+            {
+                Destroy(objDuplicated[i]);
+            }
+            for (int i = 0; i < 45; i++)
+            {
+                if (mesh != null)
+                {
+                    GameObject tmp = Instantiate(mesh);
+                    Destroy(tmp.GetComponent<BezierCurvePath>());
+                    for (int j = 0; j < tmp.transform.childCount; j++)
+                    {
+                        Destroy(tmp.transform.GetChild(j).GetComponent<BezierCurveMesh>());
+                    }
+                    tmp.transform.RotateAround(milieu, direction, i * 8);
+                    tmp.transform.parent = revolution.transform;
+                    objDuplicated.Add(tmp);
+                }
+
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             boutons.gameObject.SetActive(!boutons.gameObject.activeSelf);
@@ -115,6 +172,7 @@ public class CanvasManagement : MonoBehaviour, IPointerEnterHandler
             {
                 Tool_Bezier.getInstance().Bezier();
             }
+            
             yield return new WaitForSeconds(0.1f);
         }
     }

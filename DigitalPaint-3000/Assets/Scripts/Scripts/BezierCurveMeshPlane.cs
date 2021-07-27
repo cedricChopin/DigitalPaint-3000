@@ -137,8 +137,28 @@ public class BezierCurveMeshPlane : MonoBehaviour {
     /// </summary>
     public void ResetMesh()
     {
-        quadRows = new List<Vector3[]>();
-        previousQuadRowVertices = new List<Vector3>();
+        if(quadRows != null)
+        {
+            for(int i = 0; i < quadRows.Count; ++i) { 
+                quadRows[i] = null;
+
+            }
+            quadRows.Clear();
+        }
+        else
+        {
+            quadRows = new List<Vector3[]>();
+        }
+
+        if (previousQuadRowVertices != null)
+        {
+            
+            previousQuadRowVertices.Clear();
+        }
+        else
+        {
+            previousQuadRowVertices = new List<Vector3>();
+        }
     }
 
     /// <summary>

@@ -12,8 +12,8 @@ namespace SplineMesh {
     /// It provides methods to get positions and tangent along the spline, specifying a distance or a ratio, plus the curve length.
     /// The spline and the nodes raise events each time something is changed.
     /// </summary>
-    [DisallowMultipleComponent]
-    [ExecuteInEditMode]
+    //[DisallowMultipleComponent]
+    //[ExecuteInEditMode]
     public class Spline : MonoBehaviour {
         /// <summary>
         /// The spline nodes.

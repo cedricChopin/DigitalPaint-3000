@@ -53,33 +53,7 @@ public class BezierCurvePath : MonoBehaviour
     /// </summary>
     public float uvTilesPerCurve = 2f;
 
-    /// <summary>
-    /// Generate some curve demo data
-    /// </summary>
-    void DemoData1()
-    {
-        var curve = new BezierCurveData();
-        curve.points = new Vector3[4]
-        {
-            new Vector3(0,0,0),
-            new Vector3(10,0,0),
-            new Vector3(20,5f,10),
-            new Vector3(30,10,30)
-        };
-        curveDatas.Add(curve);
-
-        curve = new BezierCurveData();
-        curve.points = new Vector3[4]
-        {
-            new Vector3(30,10,30),
-            new Vector3(40,20,40),
-            new Vector3(40,20,40),
-            new Vector3(60,-10,100)
-        };
-        curveDatas.Add(curve);
-        
-    }
-
+    private Vector3[] testMemory;
     /// <summary>
     /// Initialize stuff
     /// </summary>
@@ -115,6 +89,10 @@ public class BezierCurvePath : MonoBehaviour
             //PointMesh();
             UpdateCurvePositionsByAnchors();
             CreateMesh();
+        }
+        if (Time.frameCount % 30 == 0)
+        {
+            System.GC.Collect();
         }
     }
 
